@@ -9,10 +9,13 @@ statement : binding _PERIOD
 binding : ID _WA type_ann _DECL_SEP expr _DESU // xは数の1です。
         | ID _WA type_ann _DESU // xは数です。
 
-type_ann : T_INT 
+?type_ann : T_INT | T_FLOAT | T_STRING | T_BOOL 
 
-expr : INTEGER
-     | ID
+?expr : INTEGER
+        | ID
+        | BOOL
+        | STRING
+        | FLOAT
 
 // -- 函数调用 --------------
 func_call : expr _WO FUNC_ID
@@ -22,6 +25,10 @@ PRINT.2   : "と言う"
 RETURN.2  : "と答える"
 
 T_INT.2    : "数"
+T_FLOAT.2  : "浮"
+T_STRING.2 : "符"
+T_BOOL.2   : "判"
+
 _WA        : "は"
 _WO        : "を"
 _DECL_SEP  : "の"
@@ -29,6 +36,9 @@ _DESU      : "です"
 _PERIOD     : "。"
 
 INTEGER.2  : /[0-9]+/
+BOOL.2     : /是|非/
+STRING.2   : /「[^」]*」/
+FLOAT.2    : /[0-9]+\.[0-9]+/
 FUNC_ID.3  : /[一-龯ァ-ンa-zA-Z]+/ "す" /る/?
 ID.1       : /[一-龯ァ-ンa-zA-Z]+/
 
