@@ -9,4 +9,5 @@ class IntLiteral:
 class Binding:
     name: str
     type_ann: str
+    value: Optional[IntLiteral] = None
 
