@@ -1,0 +1,37 @@
+// いろは語法
+
+// -- 入口 --------------
+program: statement+
+statement : binding PERIOD 
+          | func_call PERIOD
+
+// -- 绑定语句 --------------
+binding : ID WA type_ann DECL_SEP expr // xは数の1
+        | ID WA type_ann // xは数
+
+type_ann : T_INT
+
+expr : INTEGER
+     | ID
+
+// -- 函数调用 --------------
+func_call : expr WO FUNC_ID
+
+// -- 終止符 --------------
+PRINT.2   : "と言う"
+RETURN.2  : "と答える"
+
+T_INT     : "数"
+WA        : "は"
+WO        : "を"
+DECL_SEP  : "の"
+PERIOD    : "。"
+
+INTEGER   : /[0-9]+/
+FUNC_ID.2 : ID "す" /る/?
+ID.1      : /[一-龯ァ-ン]+/
+
+
+%ignore /[\s ]+/  // 忽略空白
+
+
