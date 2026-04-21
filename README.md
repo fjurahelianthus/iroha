@@ -1,2 +1,4 @@
 # iroha
-An esolang based on Japanese grammar
+
+An esolang based on Japanese grammar and lexicons.
+
