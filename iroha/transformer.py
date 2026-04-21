@@ -12,7 +12,7 @@ class IrohaTransformer(Transformer):
     def type_ann(self, children):
         return str(children[0])
     
-    def binding(self, children, value):
+    def binding(self, children):
         if len(children) == 2:
             return Binding(name=children[0], type_ann=children[1], value=None)
         else:
