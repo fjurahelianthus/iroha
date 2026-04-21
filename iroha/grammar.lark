@@ -6,8 +6,8 @@ statement : binding PERIOD
           | func_call PERIOD
 
 // -- 绑定语句 --------------
-binding : ID WA type_ann DECL_SEP expr // xは数の1
-        | ID WA type_ann // xは数
+binding : ID _WA type_ann _DECL_SEP expr _DESU // xは数の1です。
+        | ID _WA type_ann _DESU // xは数です。
 
 type_ann : T_INT
 
@@ -15,21 +15,22 @@ expr : INTEGER
      | ID
 
 // -- 函数调用 --------------
-func_call : expr WO FUNC_ID
+func_call : expr _WO FUNC_ID
 
 // -- 終止符 --------------
 PRINT.2   : "と言う"
 RETURN.2  : "と答える"
 
-T_INT     : "数"
-WA        : "は"
-WO        : "を"
-DECL_SEP  : "の"
-PERIOD    : "。"
+T_INT.2    : "数"
+_WA        : "は"
+_WO        : "を"
+_DECL_SEP  : "の"
+_DESU      : "です"
+PERIOD     : "。"
 
-INTEGER   : /[0-9]+/
-FUNC_ID.2 : ID "す" /る/?
-ID.1      : /[一-龯ァ-ン]+/
+INTEGER.2  : /[0-9]+/
+FUNC_ID.3  : /[一-龯ァ-ンa-zA-Z]+/ "す" /る/?
+ID.1       : /[一-龯ァ-ンa-zA-Z]+/
 
 
 %ignore /[\s ]+/  // 忽略空白
