@@ -1,4 +1,4 @@
 iroha.code-workspace
-tree_parse.py
+test/
 __pycache__/
 *.pyc
