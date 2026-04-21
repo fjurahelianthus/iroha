@@ -1,148 +1,138 @@
-# IROHA Language Specification
+# IROHA 設計總結
 
-## Implementation
-- Implementation language: Python
-- Parser: lark (LALR mode)
-- Execution: interpreted
-
----
-
-## Character Set Layering
-
-| Character type | Role |
-|----------------|------|
-| Kanji | Reserved type names, builtin names, part of identifiers |
-| Hiragana | Grammar keywords and particles — all reserved |
-| Katakana | Part of identifiers (may mix freely with kanji) |
-| Full-width symbols | Syntactic punctuation: （）「」。、 |
-
-**Identifier rules:** Any combination of kanji and katakana, resolved via longest match. A pure-kanji sequence is checked against the reserved word list first. A function identifier must end in する or す.
+## 實作
+- 語言：Python
+- Parser：lark（LALR模式）
+- 目標：interpreter
 
 ---
 
-## Type System
+## 字符集分層
 
-| Type | Meaning |
-|------|---------|
-| `数` | Integer |
-| `浮` | Float |
-| `符` | Character |
-| `符々` | String |
-| `判` | Boolean (values: `是` / `非`) |
-| `数々` | 1D integer array |
-| `数々々` | 2D integer array (々 stacks arbitrarily for higher dimensions) |
+| 字符類型 | 角色 |
+|----------|------|
+| 漢字 | 保留類型名、builtin名、identifier的一部分 |
+| 平假名 | 語法關鍵字和助詞，全部reserved |
+| 片假名 | identifier的一部分（可與漢字混寫） |
+| 全角符號 | 語法符號（（）「」。、） |
+
+Identifier規則：漢字和片假名的任意組合，longest match。純漢字查保留字列表。函數identifier必須以する/す結尾。
+
+---
+
+## 類型系統
+
+| 類型名 | 意義 |
+|--------|------|
+| `数` | 整數 |
+| `浮` | 浮點數 |
+| `符` | 字符 |
+| `符々` | 字串 |
+| `判` | Boolean（值為`是`/`非`） |
+| `数々` | 一維整數陣列 |
+| `数々々` | 二維整數陣列（々可無限疊加） |
 
 ---
 
 ## Binding
 
 ```
-xは数の1です。       # explicit typed binding
-xは数です。          # declaration without value
+xは数の1です。       # 顯式類型binding
+xは数です。          # 宣告不賦值
 常に数の1。          # const
 ```
 
 ---
 
-## Functions
+## 函數
 
 ```
-# Signature
+# 宣告
 計算するの法は数のa、数のbと数のcを使え。
 
-# Definition
+# 定義
 計算するとは、
   aとbをたす
   と答える。
 
-# Call
+# 呼叫
 aとbを計算する。
 a、bとcを計算する。
 ```
 
-> ⚠️ `a、b、cを計算する。` — warning: もう噛んじゃう
-
-`と答える` is the return statement. It is tokenized as a single compound token, not as the particle と followed by a verb.
+> ⚠️ `a、b、cを計算する。` → warning: もう噛んじゃう
 
 ---
 
-## Control Flow
+## 控制流
 
 ```
-# Range loop
+# 範圍迴圈
 1から10まで2ずつ繰り返す。
 
-# While loop
+# while
 xは是まで繰り返す。
 
-# Conditionals
+# 條件分支
 xは1でしたら、
-  「はい」と言う。
+  「一」と言う。
 それとも xは2でしたら、
-  「いいえ」と言う。
+  「ニ」と言う。
 それ以外、
   「いいえ」と言う。
 ```
 
 ---
 
-## Built-in Verbs
+## 內置動詞
 
-| Verb | Meaning |
-|------|---------|
-| `と言う` | print (compound token) |
-| `と答える` | return (compound token) |
-| `をたす` | addition |
-| `をへる` | subtraction |
-| `をかける` | multiplication |
-| `をわる` | division |
+| 動詞 | 意義 |
+|------|------|
+| `と言う` | print（複合token） |
+| `と答える` | return（複合token） |
+| `をたす` | 加法 |
+| `をへる` | 減法 |
+| `をかける` | 乗法 |
+| `をわる` | 除法 |
 | `をみる` | debug inspect |
-| `をきく` | read input |
-
-`と言う` and `と答える` are tokenized as compound tokens to resolve ambiguity with the particle と used in argument lists.
+| `をきく` | 讀取輸入 |
 
 ---
 
-## Operators
+## 運算子
 
-**Comparison:**
+**比較：**
 - `xはyより` → x < y
 - `xはyより等` → x ≤ y
-- For x > y or x ≥ y, swap the operands.
+- x > y → 交換xy位置
 
-**Logical / Bitwise:**
-
-| Symbol | Meaning |
-|--------|---------|
+**邏輯/Bitwise：**
+| 符號 | 意義 |
+|------|------|
 | `且` | AND |
 | `又` | OR |
-| `の逆` | NOT (postfix) |
+| `の逆` | NOT（後置） |
 | `異` | XOR |
 | `動` | shift |
 
-**Grouping:** `（x且y）の逆`
-
-Scope of `の逆` binds to the immediately preceding operand or grouped expression only.
+**Grouping：** `（x且y）の逆`
 
 ---
 
-## Lexer Notes
+## Lexer 特殊處理
 
-- `と言う` and `と答える` are tokenized as single compound tokens before any other rules are applied.
-- Hiragana-only sequences are always tokenized as keywords or particles.
-- Kanji-katakana mixed sequences use longest match and are tokenized as `IDENTIFIER`.
-- Pure-kanji sequences use longest match, then checked against the reserved word list; if not reserved, treated as `IDENTIFIER`.
-- Sequences ending in する or す are tokenized as `FUNC_IDENTIFIER`.
+- `と言う`、`と答える` → 整體tokenize為複合token，消除と的歧義
+- 平假名序列 → 直接tokenize為關鍵字
+- 漢字片假名混寫 → longest match為IDENTIFIER
+- する/す結尾 → FUNC_IDENTIFIER
 
 ---
 
-## Error Messages
-
-Compiler diagnostics are written in Japanese.
+## 報錯風格
 
 ```
-エラー：xは知らない。        # undefined variable
-エラー：これは違います。      # type mismatch
-エラー：だめです。            # illegal operation
-警告：もう噛んじゃう          # all arguments separated by 、
+エラー：xは知らない。       # 未定義變數
+エラー：これは違います。     # 類型錯誤
+エラー：だめです。           # 非法操作
+警告：もう噛んじゃう         # 全頓號分隔參數
 ```
