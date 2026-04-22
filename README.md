@@ -144,7 +144,7 @@ iroha/
 ├── docs/
 │   ├── SPEC.md          # Language design reference
 │   ├── EBNF.md          # Token and grammar rules
-│   └── Structure.md     # Codebase structure
+│   └── STRUCTURE.md     # Codebase structure
 └── test/
     ├── env_test.py
     └── tree_parse.py
