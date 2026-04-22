@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Optional, Union
+from dataclasses import dataclass, field
+from typing import Optional, Union, List
 
 @dataclass
 class IntLiteral:
@@ -25,3 +25,7 @@ class Binding:
     type_ann: str
     value: Optional[Literal] = None
 
+@dataclass
+class FuncCall:
+    func: str
+    args: list[Literal | str] = field(default_factory=list)

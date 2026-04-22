@@ -1,13 +1,13 @@
-// いろは語法
+// IROHA GRAMMAR
 
-// -- 入口 --------------
+// -- ENTRANCE --------------
 program: statement+
-statement : binding _PERIOD 
-          | func_call _PERIOD
+?statement : binding _PERIOD 
+                | func_call _PERIOD
 
-// -- 绑定语句 --------------
+// -- BINDING --------------
 binding : ID _WA type_ann _DECL_SEP expr _DESU // xは数の1です。
-        | ID _WA type_ann _DESU // xは数です。
+                | ID _WA type_ann _DESU // xは数です。
 
 ?type_ann : T_INT | T_FLOAT | T_STRING | T_BOOL 
 
@@ -17,23 +17,46 @@ binding : ID _WA type_ann _DECL_SEP expr _DESU // xは数の1です。
         | STRING
         | FLOAT
 
-// -- 函数调用 --------------
-func_call : expr _WO FUNC_ID
+// -- FUNCTION CALL --------------
+func_call : args _WO FUNC_ID
+                | args _WO BUILTIN_FUNC
+                | expr PRINT
+                | expr RETURN
+                | FUNC_ID
 
-// -- 終止符 --------------
+args : expr (_COMMA expr)* [_TO expr] // x、yとz
+
+
+// -- TERMINATOR --------------
+
+// -- BUILT-IN FUNCTIONS --
+
 PRINT.2   : "と言う"
 RETURN.2  : "と答える"
+BUILTIN_FUNC.2 : "たす" | "ひく" | "かける" | "わる"
+
+// -- TYPES --
 
 T_INT.2    : "数"
 T_FLOAT.2  : "浮"
 T_STRING.2 : "符"
 T_BOOL.2   : "判"
 
+// -- PARTICLES --
+
 _WA        : "は"
 _WO        : "を"
 _DECL_SEP  : "の"
 _DESU      : "です"
-_PERIOD     : "。"
+_COMMA     : "、"
+_PERIOD    : "。"
+_TO        : "と"
+
+// -- TRANSFORMERS --
+
+_NO_KEKKA : "の結果"
+
+// -- LITERALS & IDENTIFIERS --
 
 INTEGER.2  : /[0-9]+/
 BOOL.2     : /是|非/
@@ -43,4 +66,4 @@ FUNC_ID.3  : /[一-龯ァ-ンa-zA-Z]+/ "す" /る/?
 ID.1       : /[一-龯ァ-ンa-zA-Z]+/
 
 
-%ignore /[\s ]+/  // 忽略空白
+%ignore /[\s ]+/  // IGNORE SPACE

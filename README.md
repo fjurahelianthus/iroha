@@ -58,12 +58,12 @@ aとbをたす。            # add a and b
 | --------- | ------------- |
 | `と言う`  | print         |
 | `と答える`| return        |
-| `をたす`  | addition      |
-| `をへる`  | subtraction   |
-| `をかける`| multiplication|
-| `をわる`  | division      |
-| `をみる`  | debug inspect |
-| `をきく`  | read input    |
+| `たす`    | addition      |
+| `へる`    | subtraction   |
+| `かける`  | multiplication|
+| `わる`    | division      |
+| `みる`    | debug inspect |
+| `きく`    | read input    |
 
 ### Functions (planned)
 

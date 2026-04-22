@@ -40,3 +40,15 @@ class IrohaTransformer(Transformer):
             return Binding(name=children[0], type_ann=children[1], value=None)
         else:
             return Binding(name=children[0], type_ann=children[1], value=children[2])
+        
+    def args(self, children):
+        return children
+
+    def func_call(self, children):
+        if len(children) == 1:
+            return FuncCall(func=children[0])
+        else:
+            return FuncCall(func=children[1], args=children[0])
+    
+    def program(self, children):
+        return children
