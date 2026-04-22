@@ -8,32 +8,40 @@ program: statement+
 // -- BINDING --------------
 binding : ID _WA type_ann _DECL_SEP expr _DESU // xは数の1です。
                 | ID _WA type_ann _DESU // xは数です。
+                | ID _WA type_ann _DECL_SEP func_call _NO_KEKKA _DESU
 
 ?type_ann : T_INT | T_FLOAT | T_STRING | T_BOOL 
 
-?expr : INTEGER
-        | ID
-        | BOOL
-        | STRING
-        | FLOAT
+?simple_expr : INTEGER | FLOAT | STRING | BOOL | ID
+
 
 // -- FUNCTION CALL --------------
+
+?passable : simple_expr
+           | func_call _NO_KEKKA // …をたすの結果
+
 func_call : args _WO FUNC_ID
                 | args _WO BUILTIN_FUNC
-                | expr PRINT
-                | expr RETURN
+                | chain
+                | passable PRINT
+                | passable RETURN
                 | FUNC_ID
-
-args : expr (_COMMA expr)* [_TO expr] // x、yとz
-
+                
+chain_step : args _WO BUILTIN_FUNC_TE _COMMA // xとyをたして、 
+chain : chain_step+ args _WO BUILTIN_FUNC // xとyをたして、zをかける
+?expr : simple_expr | chain
+args : simple_expr (_COMMA simple_expr)* [_TO simple_expr] // x、yとz | xとy | x | x、y 
 
 // -- TERMINATOR --------------
 
 // -- BUILT-IN FUNCTIONS --
 
-PRINT.2   : "と言う"
+PRINT.2   : "と言う" | "という"
 RETURN.2  : "と答える"
-BUILTIN_FUNC.2 : "たす" | "ひく" | "かける" | "わる"
+BUILTIN_FUNC.2 : "たす" | "へる" | "かける" | "わる"
+
+// CONTINUOUS VERBS (for chaining)
+BUILTIN_FUNC_TE.3 : "たして" | "かけて" | "へって" | "わって"
 
 // -- TYPES --
 

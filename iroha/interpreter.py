@@ -6,7 +6,7 @@ class IrohaInterpreter:
     def __init__(self):
         self.env = Environment()
         self.builtins = {
-            "と言う":  lambda args: print(*args),  # print 不限參數數量，不需要 _builtin
+            "と言う":  lambda args: print(*args),  # print has no limit on number of arguments
             "と答える": lambda args: ...,
             "たす": self._builtin("たす", 2, lambda args: args[0] + args[1]),
             "へる": self._builtin("へる", 2, lambda args: args[0] - args[1]),
@@ -42,7 +42,7 @@ class IrohaInterpreter:
         if node.func in self.builtins:
             return self.builtins[node.func](args)
         raise IrohaError("だめです。")
-
+        
     def eval(self, node):
         if isinstance(node, IntLiteral):
             return node.value
@@ -56,7 +56,19 @@ class IrohaInterpreter:
             return self._exec_func_call(node)
         elif isinstance(node, str):
             return self.env.get(node)
+        elif isinstance(node, Chain):
+            result = None
+            for step in node.steps:
+                args = [self.eval(arg) for arg in step.args]
+                if result is not None:
+                    args = [result] + args
+                result = self.builtins[step.verb](args)
+            final_args = [self.eval(arg) for arg in node.final_args]
+            if result is not None:
+                final_args = [result] + final_args
+            return self.builtins[node.verb](final_args)
         elif node is None:
             return None
         else:
+            print(f"計算できません: type={type(node)}, value={node!r}")
             raise IrohaError(f"計算できません。")
