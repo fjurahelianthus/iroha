@@ -1,6 +1,6 @@
-# IROHA EBNF 規則
+# IROHA EBNF 
 
-## 字面值
+## LITERAL
 
 ```ebnf
 INT      [0-9]+
@@ -9,14 +9,14 @@ STR      「 ... 」
 BOOL     是 | 非
 ```
 
-## 復合詞元
+## COMPOUND TOKEN
 
 ```ebnf
 PRINT   と言う
 RETURN  と答える
 ```
 
-## 型別關鍵字
+## TYPE KEYWORDS
 
 ```ebnf
 INT          数
@@ -26,14 +26,14 @@ BOOL         判
 ARRAY_SUFFIX 々
 ```
 
-## Binding
+## BINDING
 
 ```ebnf
 CONST       常に
 DECL_SEP    の
 ```
 
-## 函數
+## FUNCTION
 
 ```ebnf
 FUNC_DECL    の法は
@@ -41,21 +41,21 @@ FUNC_DEF     とは
 FUNC_USE     を使え
 ```
 
-## 控制流
+## CONTROL FLOW
 
 ```ebnf
 RANGE_FROM   から
 RANGE_TO     まで
 RANGE_STEP   ずつ
 LOOP_END     繰り返す
-WHILE_COND   まで        (* 和 RANGE_TO 同形，靠 context 區分 *)
+WHILE_COND   まで        (**)
 IF           でしたら
 ELIF         それとも
 ELSE         それ以外
 BLOCK_END    終わり
 ```
 
-## 運算子
+## OPERATIONS
 
 ```ebnf
 AND          且
@@ -63,12 +63,12 @@ OR           又
 NOT          の逆
 XOR          異
 SHIFT        動
-LT           より
-LTE          より等
+GT           より
+GTE          より等
 MINUS        -
 ```
 
-## 內建函數
+## BUILT-IN FUNCTIONS
 
 ```ebnf
 ADD          をたす
@@ -80,7 +80,7 @@ INPUT        をきく
 ···
 ```
 
-## 助詞/標點
+## PARTICLES AND SYMBOLS
 
 ```ebnf
 WA           は
@@ -92,7 +92,7 @@ LPAREN       （
 RPAREN       ）
 ```
 
-## 識別符
+## IDENTIFIER
 
 ```ebnf
 VAR_ID     {漢字 | カタカナ | [A-Za-z0-9]}+

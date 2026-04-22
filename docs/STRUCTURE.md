@@ -114,19 +114,3 @@ IrohaTransformer（transformer.py）
     ▼
 輸出
 ```
-
----
-
-## 測試
-
-| 檔案 | 測試內容 |
-|------|---------|
-| `test/env_test.py` | `Environment` 的 define、set、parent 查找、未定義變數例外 |
-| `test/tree_parse.py` | 五種 binding 語法的完整剖析與 AST 轉換 |
-
-執行測試（從專案根目錄）：
-
-```bash
-python test/env_test.py
-python test/tree_parse.py
-```
