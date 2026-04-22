@@ -13,6 +13,7 @@ class IrohaInterpreter:
             "かける": self._builtin("かける", 2, lambda args: args[0] * args[1]),
             "わる": self._builtin("わる", 2, lambda args: args[0] / args[1]),
         }
+        self.env.define("伊呂波ノ歌", "いろはにほへと　ちりぬるを\nわかよたれそ　　つねならむ\nうゐのおくやま　けふこえて\nあさきゆめみし　ゑひもせす")
 
     def _builtin(self, func, arity, op):
         def wrapped(args):
@@ -42,7 +43,7 @@ class IrohaInterpreter:
         if node.func in self.builtins:
             return self.builtins[node.func](args)
         raise IrohaError("だめです。")
-        
+    
     def eval(self, node):
         if isinstance(node, IntLiteral):
             return node.value

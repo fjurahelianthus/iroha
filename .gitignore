@@ -1,4 +1,5 @@
 iroha.code-workspace
 test/
+*.iroha
 __pycache__/
 *.pyc
